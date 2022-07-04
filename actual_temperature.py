@@ -71,7 +71,7 @@ def create_csv():
 
     # データ取得開始・終了日
     start_date = datetime.date(2022, 1, 1)  # あとで出穂の日からに直す
-    end_date = datetime.date(yesterday)
+    end_date = datetime.date(yesterday)  # データ形式のエラーくさい、、、
 
     # CSV の列
     fields = [

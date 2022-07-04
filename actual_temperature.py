@@ -11,6 +11,7 @@ yesterday = today + relativedelta(days=-1)
 
 print(yesterday)
 
+
 def str2float(weather_data):
     try:
         return float(weather_data)
@@ -50,6 +51,9 @@ def scraping(url, date):
         data_list.append(str2float(tds[11].string))
         data_list.append(str2float(tds[12].string))
         data_list.append(str2float(tds[13].string))
+        data_list.append(str2float(tds[14].string))
+        data_list.append(str2float(tds[15].string))
+        data_list.append(str2float(tds[16].string))
 
         data_list_per_hour.append(data_list)
 
@@ -66,27 +70,29 @@ def create_csv():
     output_file = "weather.csv"
 
     # データ取得開始・終了日
-    start_date = datetime.date(2011, 1, 1)
+    start_date = datetime.date(2022, 1, 1)  # あとで出穂の日からに直す
     end_date = datetime.date(yesterday)
 
     # CSV の列
     fields = [
-        "年月日",
-        "時間",
-        "気圧（現地）",
-        "気圧（海面）",
-        "降水量",
-        "気温",
-        "露点湿度",
-        "蒸気圧",
-        "湿度",
-        "風速",
+        "日",
+        "降水量(合計/mm)",
+        "降水量(最大1時間/mm)",
+        "降水量(最大10分間/mm)",
+        "平均気温(℃)",
+        "最高気温(℃)",
+        "最低気温(℃)",
+        "平均湿度(㌫)",
+        "最小湿度(㌫)",
+        "平均風速(m/s)",
+        "最大風速(m/s)",
         "風向",
-        "日照時間",
-        "全天日射量",
-        "降雪",
-        "積雪",
-    ]  # 天気、雲量、視程は今回は対象外とする
+        "最大瞬間風速(m/s)",
+        "風向",
+        "最多風向",
+        "日照時間(h)",
+        "降雪の深さの合計(m)" "最深積雪(m)",
+    ]
 
     with open(os.path.join(output_dir, output_file), "w") as f:
         writer = csv.writer(f, lineterminator="\n")

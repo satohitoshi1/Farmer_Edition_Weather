@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import datetime
+from sqlite3 import Row
 from dateutil.relativedelta import relativedelta
 import csv
 import urllib.request
@@ -10,8 +11,6 @@ from bs4 import BeautifulSoup
 
 today = datetime.date.today()
 yesterday = today + relativedelta(days=-1)
-
-print(yesterday)
 
 
 def str2float(weather_data):
@@ -40,8 +39,9 @@ def scraping(url, date):
     # ボツ2
     #    for tr in trs.find_all("tr")[2:]:
     #        tds = tr.find_all("td")
-    
-    trs = soup.find_all("tr", class_="mtx")
+
+    trs = soup.find_all("tr", class_="mtx")[3:]
+
     for tr in trs:
         tds = tr.find_all("td")
         if tds[1].string is None:
@@ -65,6 +65,7 @@ def scraping(url, date):
         data_list.append(str2float(tds[14].string))
         data_list.append(str2float(tds[15].string))
         data_list.append(str2float(tds[16].string))
+        data_list.append(str2float(tds[17].string))
 
         data_list_per_hour.append(data_list)
 
@@ -114,7 +115,7 @@ def create_csv():
 
             # 対象url（鶴岡市）
             url = (
-                "https://www.data.jma.go.jp/obd/stats/etrn/view/daily_a1.php?prec_no=35&block_no=0263&year=2021&month=1&day=1&view="
+                "https://www.data.jma.go.jp/obd/stats/etrn/view/daily_a1.php?prec_no=35&block_no=0263&year=%s&month=%s&day=%s&view="
                 % (date.year, date.month, date.day)
             )
 

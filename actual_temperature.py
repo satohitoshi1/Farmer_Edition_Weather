@@ -6,6 +6,8 @@ import csv
 import urllib.request
 from bs4 import BeautifulSoup
 
+# CSVいらない疑惑
+
 today = datetime.date.today()
 yesterday = today + relativedelta(days=-1)
 
@@ -30,13 +32,22 @@ def scraping(url, date):
     data_list_per_hour = []
 
     # table の中身を取得
-    for tr in trs.findAll("tr")[2:]:
-        tds = tr.findAll("td")
 
-        if tds[1].string == None:
+    # ボツ1
+    #    tags = soup.find_all('tr', class_='mtx')
+    #    tbs = [tag.text for tag in tags]
+
+    # ボツ2
+    #    for tr in trs.find_all("tr")[2:]:
+    #        tds = tr.find_all("td")
+    
+    trs = soup.find_all("tr", class_="mtx")
+    for tr in trs:
+        tds = tr.find_all("td")
+        if tds[1].string is None:
             break
 
-        data_list.append(date)  #
+        data_list.append(date)
         data_list.append(tds[0].string)
         data_list.append(str2float(tds[1].string))
         data_list.append(str2float(tds[2].string))
@@ -71,7 +82,7 @@ def create_csv():
 
     # データ取得開始・終了日
     start_date = datetime.date(2022, 1, 1)  # あとで出穂の日からに直す
-    end_date = datetime.date(yesterday)  # データ形式のエラーくさい、、、
+    end_date = yesterday  # 気象庁の更新が昨日までなので
 
     # CSV の列
     fields = [

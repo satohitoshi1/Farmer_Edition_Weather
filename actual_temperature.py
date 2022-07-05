@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 import datetime
-from sqlite3 import Row
 from dateutil.relativedelta import relativedelta
 import csv
 import urllib.request
@@ -111,12 +110,12 @@ def create_csv():
         writer.writerow(fields)
 
         date = start_date
-        while date != end_date + datetime.timedelta(1):
+        while date != end_date + datetime.timedelta(1):  #
 
-            # 対象url（鶴岡市）
+            # 鶴岡市
             url = (
-                "https://www.data.jma.go.jp/obd/stats/etrn/view/daily_a1.php?prec_no=35&block_no=0263&year=%s&month=%s&day=%s&view="
-                % (date.year, date.month, date.day)
+                "https://www.data.jma.go.jp/obd/stats/etrn/view/daily_a1.php?prec_no=35&block_no=0263&year=2022&month=0%s&day=1&view="
+                % (date.month)
             )
 
             data_per_day = scraping(url, date)
@@ -124,7 +123,7 @@ def create_csv():
             for dpd in data_per_day:
                 writer.writerow(dpd)
 
-            date += datetime.timedelta(1)
+            relativedelta(months=1)
 
 
 if __name__ == "__main__":

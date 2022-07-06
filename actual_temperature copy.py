@@ -102,7 +102,8 @@ def create_csv():
         "風向",
         "最多風向",
         "日照時間(h)",
-        "降雪の深さの合計(m)" "最深積雪(m)",
+        "降雪の深さの合計(m)",
+        "最深積雪(m)"
     ]
 
     with open(os.path.join(output_dir, output_file), "w") as f:
@@ -111,14 +112,18 @@ def create_csv():
         date = start_date
 
         while date != end_date + datetime.timedelta(1):  #
+            
+        for mon in range(1,13):
 
             # 鶴岡市
-            url = (
-                "https://www.data.jma.go.jp/obd/stats/etrn/view/daily_a1.php?prec_no=35&block_no=0263&year=2022&month=0%s&day=1&view="
-                % (date.month)
-            )
+            # base_url = (
+            #     "https://www.data.jma.go.jp/obd/stats/etrn/view/daily_a1.php?prec_no=35&block_no=0263&year=2022&month=01&day=1&view="
+                        )
+            search_url = (
+                f"https://www.data.jma.go.jp/obd/stats/etrn/view/daily_a1.php?prec_no=35&block_no=0263&year=2022&month={mon}&day=1&view="
+                        )
 
-            data_per_day = scraping(url, date)
+            data_per_day = scraping(search_url, date)
 
             for dpd in data_per_day:
                 writer.writerow(dpd)

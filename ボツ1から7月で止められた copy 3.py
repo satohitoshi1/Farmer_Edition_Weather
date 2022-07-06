@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-import datetime
+from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 import csv
 import urllib.request
@@ -8,9 +8,19 @@ from bs4 import BeautifulSoup
 
 # CSVいらない疑惑
 # データ取得開始・終了日
-start_date = datetime.date(2022, 1, 1)  # あとで出穂の日からに直す
-yesterday = datetime.date.today() + relativedelta(days=-1)  # 気象庁の更新が昨日までなので
+start_date = datetime(2022, 1, 1)  # あとで出穂の日からに直す
+yesterday = datetime.today() - relativedelta(days=1)  # 気象庁の更新が昨日までなので
 end_month = yesterday.month
+
+# 期間内の日付けを返す
+
+
+def date_range(start_date: datetime, yesterday: datetime):
+    diff = (yesterday - start_date).days + 1
+    return (start_date + timedelta(i) for i in range(diff))
+
+
+print(date_range)
 
 
 def str2float(weather_data):
@@ -20,7 +30,7 @@ def str2float(weather_data):
         return 0
 
 
-def scraping(url, date):
+def scraping(url, date_range):
     # 気象データのページを取得
     html = urllib.request.urlopen(url).read()
     soup = BeautifulSoup(html)
@@ -37,7 +47,7 @@ def scraping(url, date):
         if tds[1].string is None:
             break
 
-        data_list.append(date)
+        data_list.append(date_range)
         data_list.append(str2float(tds[1].string))
         data_list.append(str2float(tds[2].string))
         data_list.append(str2float(tds[3].string))

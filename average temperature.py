@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 import datetime
-from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 import csv
 import urllib.request
@@ -21,13 +20,6 @@ days_num = (yesterday - strdt).days + 1
 # シンプルにforとappendを使用した場合
 
 
-days_list = []
-for w in range(days_num):
-    x = strdt + timedelta(days=w)
-    y = datetime.date.strftime(x, "%Y-%m-%d")
-    days_list.append(y)
-
-
 def str2float(weather_data):
     try:
         return float(weather_data)
@@ -35,7 +27,7 @@ def str2float(weather_data):
         return 0
 
 
-def scraping(url, date):
+def scraping(url, mon):
     # 気象データのページを取得
     html = urllib.request.urlopen(url).read()
     soup = BeautifulSoup(html)
@@ -46,36 +38,35 @@ def scraping(url, date):
 
     # table の中身を取得
     trs = soup.find_all("tr", class_="mtx")[3:]
-    for mon in range(1, end_month + 1):
-        for tr in trs:
-            tds = tr.find_all("td")
-            if tds[1].string is None:
-                break
+    for tr in trs:
+        tds = tr.find_all("td")
+        if tds[1].string == "///":
+            break
 
-            data_list.append(f"2022-{mon}-{tds[0].string}")
-            data_list.append(str2float(tds[1].string))
-            data_list.append(str2float(tds[2].string))
-            data_list.append(str2float(tds[3].string))
-            data_list.append(str2float(tds[4].string))
-            data_list.append(str2float(tds[5].string))
-            data_list.append(str2float(tds[6].string))
-            data_list.append(str2float(tds[7].string))
-            data_list.append(str2float(tds[8].string))
-            data_list.append(str2float(tds[9].string))
-            data_list.append(str2float(tds[10].string))
-            data_list.append(str2float(tds[11].string))
-            data_list.append(str2float(tds[12].string))
-            data_list.append(str2float(tds[13].string))
-            data_list.append(str2float(tds[14].string))
-            data_list.append(str2float(tds[15].string))
-            data_list.append(str2float(tds[16].string))
-            data_list.append(str2float(tds[17].string))
+        data_list.append(f"2022-{mon}-{tds[0].string}")
+        data_list.append(str2float(tds[1].string))
+        data_list.append(str2float(tds[2].string))
+        data_list.append(str2float(tds[3].string))
+        data_list.append(str2float(tds[4].string))
+        data_list.append(str2float(tds[5].string))
+        data_list.append(str2float(tds[6].string))
+        data_list.append(str2float(tds[7].string))
+        data_list.append(str2float(tds[8].string))
+        data_list.append(str2float(tds[9].string))
+        data_list.append(str2float(tds[10].string))
+        data_list.append(str2float(tds[11].string))
+        data_list.append(str2float(tds[12].string))
+        data_list.append(str2float(tds[13].string))
+        data_list.append(str2float(tds[14].string))
+        data_list.append(str2float(tds[15].string))
+        data_list.append(str2float(tds[16].string))
+        data_list.append(str2float(tds[17].string))
 
-            data_list_per_hour.append(data_list)
+        data_list_per_hour.append(data_list)
 
-            data_list = []
+        data_list = []
 
-        return data_list_per_hour
+    return data_list_per_hour
 
 
 def create_csv():
@@ -113,11 +104,11 @@ def create_csv():
         for mon in range(1, end_month + 1):  # URLのmonth==〇〇にいれる変数とりあえずrangeで
             # year=2022の部分も改良の余地ありあとで
             search_url = f"https://www.data.jma.go.jp/obd/stats/etrn/view/daily_a1.php?prec_no=35&block_no=0263&year=2022&month={mon}&day=1&view="
-            data_per_day = scraping(search_url, strdt)
+            data_per_day = scraping(search_url, mon)
             for dpd in data_per_day:
                 writer.writerow(dpd)
-            if mon == end_month:
-                break
+                if mon == yesterday:
+                    break
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-from datetime import datetime as dt
+import datetime
 from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 import csv
@@ -8,20 +8,24 @@ import urllib.request
 from bs4 import BeautifulSoup
 
 
-# CSVいらない疑惑
+# CSVいらない疑惑i
 # データ取得開始・終了日
-yesterday = dt.date.today() - relativedelta(days=1)  # 気象庁の更新が昨日までなので
+yesterday = datetime.datetime.today() - relativedelta(days=1)  # 気象庁の更新が昨日までなので
 end_month = yesterday.month
 # 日付条件の設定
-strdt = dt.strptime("2022-01-01", "%Y-%m-%d")  # 開始日
-enddt = dt.strptime(yesterday, "%Y-%m-%d")  # 終了日
+strdt = datetime.datetime.strptime("2022-01-01", "%Y-%m-%d")  # 開始日
+enddt = datetime.date.strftime(yesterday, "%Y-%m-%d")  # 終了日 いらない予感
 
-# 日付差の日数を算出（リストに最終日も含めたいので、＋１しています）
-days_num = (enddt - strdt).days + 1
+# 日付差の日数を算出（リストに最終日も含めたいので＋１）
+days_num = (yesterday - strdt).days + 1
 # シンプルにforとappendを使用した場合
-datelist = []
-for writing in range(days_num):
-    datelist.append(strdt + timedelta(days=writing))
+
+
+days_list = []
+for w in range(days_num):
+    x = strdt + timedelta(days=w)
+    y = datetime.date.strftime(x, "%Y-%m-%d")  
+    days_list.append(y)
 
 
 def str2float(weather_data):
@@ -48,7 +52,7 @@ def scraping(url, date):
         if tds[1].string is None:
             break
 
-        data_list.append(datelist)
+        data_list.append(days_list)
         data_list.append(str2float(tds[1].string))
         data_list.append(str2float(tds[2].string))
         data_list.append(str2float(tds[3].string))
@@ -107,10 +111,7 @@ def create_csv():
         writer = csv.writer(f, lineterminator="\n")
         writer.writerow(fields)
         for mon in range(1, end_month + 1):  # URLのmonth==〇〇にいれる変数とりあえずrangeで
-            # 鶴岡市
-            # base_url = (
-            #     "https://www.data.jma.go.jp/obd/stats/etrn/view/daily_a1.php?prec_no=35&block_no=0263&year=2022&month=01&day=1&view="
-            #            ) # year=2022の部分も改良の余地ありあとで
+            # year=2022の部分も改良の余地ありあとで
             search_url = f"https://www.data.jma.go.jp/obd/stats/etrn/view/daily_a1.php?prec_no=35&block_no=0263&year=2022&month={mon}&day=1&view="
             data_per_day = scraping(search_url, strdt)
             for dpd in data_per_day:

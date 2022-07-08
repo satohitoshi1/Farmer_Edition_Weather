@@ -38,7 +38,7 @@ def scraping(url, mon):
         if tds[1].string == "///":
             break
 
-        data_list.append(f"2022-{mon}-{tds[0].string}") # 2022のとこ関数にしたいあとで
+        data_list.append(f"2022-{mon}-{tds[0].string}")  # 2022のとこ関数にしたいあとで
         data_list.append(str2float(tds[1].string))
         data_list.append(str2float(tds[2].string))
         data_list.append(str2float(tds[3].string))

@@ -85,7 +85,7 @@ def create_csv():
             data_per_day = scraping(search_url, mon)
             for dpd in data_per_day:
                 writer.writerow(dpd)
-                if mon == 12:
+                if mon == 12:  # 12/1までになっているので and day == 31: あとで足す
                     break
 
 

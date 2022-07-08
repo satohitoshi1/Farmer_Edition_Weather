@@ -13,11 +13,6 @@ yesterday = datetime.datetime.today() - relativedelta(days=1)  # 気象庁の更
 end_month = yesterday.month
 # 日付条件の設定
 strdt = datetime.datetime.strptime("2022-01-01", "%Y-%m-%d")  # 開始日
-enddt = datetime.date.strftime(yesterday, "%Y-%m-%d")  # 終了日 いらない予感
-
-# 日付差の日数を算出（リストに最終日も含めたいので＋１）
-days_num = (yesterday - strdt).days + 1
-# シンプルにforとappendを使用した場合
 
 
 def str2float(weather_data):
@@ -43,7 +38,7 @@ def scraping(url, mon):
         if tds[1].string == "///":
             break
 
-        data_list.append(f"2022-{mon}-{tds[0].string}")
+        data_list.append(f"2022-{mon}-{tds[0].string}") # 2022のとこ関数にしたいあとで
         data_list.append(str2float(tds[1].string))
         data_list.append(str2float(tds[2].string))
         data_list.append(str2float(tds[3].string))
@@ -74,7 +69,7 @@ def create_csv():
     output_dir = r"C:\Users\user\Desktop\camp"
 
     # 出力ファイル名
-    output_file = "weather.csv"
+    output_file = "average temperature.csv"
 
     # CSV の列
     fields = [

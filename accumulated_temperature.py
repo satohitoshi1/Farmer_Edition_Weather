@@ -21,7 +21,7 @@ def average():
             for v in rows_data:
                 tmp.append(v[i])
             transpose.append(tmp)
-        print(transpose)
+#        print(transpose)
 
 
 def normal():
@@ -44,7 +44,7 @@ def normal():
             for v in rows_data2:
                 tmp.append(v[i])
             transpose.append(tmp)
-        print(transpose)
+#        print(transpose)
 
 
 if __name__ == "__main__":

@@ -35,12 +35,12 @@ def scraping2(url, mon):  # mon
     trs = soup.find_all("tr", class_="mtx")[3:]
     for tr in trs:
         tds = tr.find_all("td")
-        ths = tr.find_all("th")  # 要素の取得の書き方聞く
+        ths = tr.find_all("th")
         if tds[1].string == "///":
             break
 
         data_list.append("1991～2020")
-        data_list.append(f"{mon}月{ths}")  # 要素の取得の書き方聞く
+        data_list.append(f"{mon}月{ths[0].string}")
         data_list.append(str2float(tds[0].string))
         data_list.append(str2float(tds[1].string))
         data_list.append(str2float(tds[2].string))

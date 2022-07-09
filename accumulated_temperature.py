@@ -53,5 +53,14 @@ def normal_temp():  # 平年値のリスト作成
 #        print(transpose2)
 
 
+# average_temp、normal_tempで使うimputつくる
+heading_month = float(input("出穂月を入力してください(例1,2,3)->:"))
+heading_day = float(input("出穂日を入力してください(例1,2,3)->:"))
+heading_month_day = 
+
+# リストをget[]する関数を作る
+# 上のdefに代入して平均値平年値のリストを作る
+# 判定 if 平年値平年値 <= 積算気温 をつくる
+
 if __name__ == "__main__":
-    average_temp(), normal_temp()
+    average_temp, normal_temp

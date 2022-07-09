@@ -22,7 +22,7 @@ def str2float(weather_data):
         return 0
 
 
-def scraping(url, mon):  # mon
+def scraping(url, mon):
     # 気象データのページを取得
     html = urllib.request.urlopen(url).read()
     soup = BeautifulSoup(html)
@@ -35,24 +35,32 @@ def scraping(url, mon):  # mon
     trs = soup.find_all("tr", class_="mtx")[3:]
     for tr in trs:
         tds = tr.find_all("td")
-        ths = tr.find_all("th")  # 要素の取得の書き方聞く
         if tds[1].string == "///":
             break
 
-        data_list.append("1991～2020")
-        data_list.append(f"{mon}月{ths}")  # 要素の取得の書き方聞く
-        data_list.append(str2float(tds[0].string))
+        data_list.append(f"2022-{mon}-{tds[0].string}")  # 2022のとこ関数にしたいあとで
         data_list.append(str2float(tds[1].string))
         data_list.append(str2float(tds[2].string))
         data_list.append(str2float(tds[3].string))
         data_list.append(str2float(tds[4].string))
         data_list.append(str2float(tds[5].string))
         data_list.append(str2float(tds[6].string))
+        data_list.append(str2float(tds[7].string))
+        data_list.append(str2float(tds[8].string))
+        data_list.append(str2float(tds[9].string))
+        data_list.append(str2float(tds[10].string))
+        data_list.append(str2float(tds[11].string))
+        data_list.append(str2float(tds[12].string))
+        data_list.append(str2float(tds[13].string))
+        data_list.append(str2float(tds[14].string))
+        data_list.append(str2float(tds[15].string))
+        data_list.append(str2float(tds[16].string))
+        data_list.append(str2float(tds[17].string))
 
         data_list_per_hour.append(data_list)
 
         data_list = []
-
+        print(data_list_per_hour)
     return data_list_per_hour
 
 
@@ -61,31 +69,40 @@ def create_csv():
     output_dir = r"C:\Users\user\Desktop\camp"
 
     # 出力ファイル名
-    output_file = "normal value.temperature.csv"
+    output_file = "average temperature.csv"
 
     # CSV の列
     fields = [
-        "統計期間",
-        "月日",
-        "降水量(mm)",
+        "年月日",
+        "降水量(合計/mm)",
+        "降水量(最大1時間/mm)",
+        "降水量(最大10分間/mm)",
         "平均気温(℃)",
-        "日最高気温(℃)",
-        "日最低気温(℃)",
+        "最高気温(℃)",
+        "最低気温(℃)",
+        "平均湿度(㌫)",
+        "最小湿度(㌫)",
+        "平均風速(m/s)",
+        "最大風速(m/s)",
+        "風向",
+        "最大瞬間風速(m/s)",
+        "風向",
+        "最多風向",
         "日照時間(h)",
-        "降雪の深さ合計(cm)",
-        "最深積雪(cm)",
+        "降雪の深さの合計(m)",
+        "最深積雪(m)",
     ]
 
     with open(os.path.join(output_dir, output_file), "w") as f:
         writer = csv.writer(f, lineterminator="\n")
         writer.writerow(fields)
-        for mon in range(1, 13):  # URLのmonth==〇〇にいれる変数とりあえずrangeで
+        for mon in range(1, end_month + 1):  # URLのmonth==〇〇にいれる変数とりあえずrangeで
             # year=2022の部分も改良の余地ありあとで
-            search_url = f"https://ds.data.jma.go.jp/obd/stats/etrn/view/nml_amd_d.php?prec_no=35&block_no=0263&year=2022&month={mon}&day=06&view=g_tem"
+            search_url = f"https://www.data.jma.go.jp/obd/stats/etrn/view/daily_a1.php?prec_no=35&block_no=0263&year=2022&month={mon}&day=1&view="
             data_per_day = scraping(search_url, mon)
             for dpd in data_per_day:
                 writer.writerow(dpd)
-                if mon == 12:  # 12/1までになっているので and day == 31: あとで足す
+                if mon == yesterday:
                     break
 
 

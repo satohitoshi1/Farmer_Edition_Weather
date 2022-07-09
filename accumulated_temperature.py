@@ -1,7 +1,7 @@
 import csv
 
 
-def average():
+def average_temp():  # 平均気温のリスト作成
     with open("average_temperature.csv", encoding="cp932") as f:
         # 不要なコメント部分を読み込まないようにする
         next(f)
@@ -21,10 +21,13 @@ def average():
             for v in rows_data:
                 tmp.append(v[i])
             transpose.append(tmp)
+    return transpose
+
+
 #        print(transpose)
 
 
-def normal():
+def normal_temp():  # 平年値のリスト作成
     with open("normal_value.temperature.csv", encoding="cp932") as f:
         # 不要なコメント部分を読み込まないようにする
         next(f)
@@ -38,14 +41,17 @@ def normal():
                 row_data.append(data)  # 各dataは1行のデータ配列に追加
             rows_data2.append(row_data)  # 1行のデータ配列を全体のデータ配列に追加
 
-        transpose = []
+        transpose2 = []
         for i in range(len(rows_data2[0])):  # 特定のリスト番号のみ取得ができないので転置する
             tmp = []
             for v in rows_data2:
                 tmp.append(v[i])
-            transpose.append(tmp)
-#        print(transpose)
+            transpose2.append(tmp)
+    return transpose2
+
+
+#        print(transpose2)
 
 
 if __name__ == "__main__":
-    average(), normal()
+    average_temp(), normal_temp()

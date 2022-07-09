@@ -1,3 +1,4 @@
+from socket import if_nameindex
 import pandas as pd
 from datetime import date
 import os
@@ -10,19 +11,43 @@ import normal_value_temperature
 import average_temperature
 
 
-def average_temperatures():
-    for mon in range(1, 13):
-        aver = average_temperature.scraping(
-            f"https://ds.data.jma.go.jp/obd/stats/etrn/view/nml_amd_d.php?prec_no=35&block_no=0263&year=2022&month={mon}&day=06&view=g_tem",
-            mon,
-        )
-        return aver
+def accumulated():
+    with open("average_temperature.csv", encoding="cp932") as f:
+        # 不要なコメント部分を読み込まないようにする
+        next(f)
+        reader = csv.reader(f)  # ヘッダーから読み込み開始
+
+        # 方法①
+        rows_data = []  # 全体のデータ配列の初期化
+        for row in reader:  # 1行ずつをrowとして取得
+            row_data = []  # 1行のデータ配列を初期化
+            for data in row:  # 1列ずつをdataとして取得
+                row_data.append(data)  # 各dataは1行のデータ配列に追加
+            rows_data.append(row_data)  # 1行のデータ配列を全体のデータ配列に追加
+
+        print(rows_data)  # 全体を取得
+
+#        transpose = []
+#        for i in range(len(roes_date[0])):
+#            tmp = []
+#            for v in roes_date:
+#                tmp.append(v[i])
+#            transpose.append(tmp)
 
 
-def normal_value_temperatures():
-    for mon in range(1, 13):
-        norm = normal_value_temperature.scraping2(
-            f"https://ds.data.jma.go.jp/obd/stats/etrn/view/nml_amd_d.php?prec_no=35&block_no=0263&year=2022&month={mon}&day=06&view=g_tem",
-            mon,
-        )
-        return norm
+with open("normal_value.temperature.csv", encoding="cp932") as f:
+    # 不要なコメント部分を読み込まないようにする
+    next(f)
+    reader = csv.reader(f)  # ヘッダーから読み込み開始
+
+    # 方法①
+    roes_date2 = []  # 全体のデータ配列の初期化
+    for row in reader:  # 1行ずつをrowとして取得
+        row_data = []  # 1行のデータ配列を初期化
+        for data in row:  # 1列ずつをdataとして取得
+            row_data.append(data)  # 各dataは1行のデータ配列に追加
+            roes_date2.append(row_data)  # 1行のデータ配列を全体のデータ配列に追加
+# print(roes_date2)  # 全体を取得
+
+if __name__ == "__main__":
+    accumulated()

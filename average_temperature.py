@@ -66,10 +66,10 @@ def scraping(url, mon):
 
 def create_csv():
     # CSV 出力先ディレクトリ
-    output_dir = r"C:\Users\user\Desktop\camp"
+    output_dir = r"C:\Users\user\Desktop\camp\☆Farmer_Edition_Weather"
 
     # 出力ファイル名
-    output_file = "average temperature.csv"
+    output_file = "average_temperature.csv"
 
     # CSV の列
     fields = [

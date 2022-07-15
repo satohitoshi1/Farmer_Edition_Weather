@@ -63,7 +63,7 @@ def normal_temp():  # 平年値のリスト作成
     return transpose2
 
 
-heading = input("出穂日を入れてください(例2022,1,1)")
+heading = input("出穂日を入れてください(例2022,1,1)>>>")
 
 dt1 = datetime.strptime(heading, "%Y,%m,%d")
 dt2 = datetime.today()
@@ -86,7 +86,7 @@ def decision():
             predict_n = n  # 予測刈り取り日の行番号 = インデックス
             result = normal_temp()
             optimal_reaping_time = result[0][predict_n]
-            print(f"刈取適期は8月9日から1週間です")  # {optimal_reaping_time}
+            print(f"{optimal_reaping_time}")  # このへんミスっていじってしまいぐだぐだ
             break
 
 
